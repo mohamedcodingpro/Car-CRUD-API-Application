@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car API Integration</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body { font-family: Arial, sans-serif; }
+        form { margin-bottom: 20px; }
+        input { margin-right: 10px; }
+        button { margin-left: 10px; }
+    </style>
+</head>
+<body>
+
+    <!-- POST a New Car -->
+    <div x-data="carForm()" @submit.prevent="submitCar">
+        <h2>Add a New Car</h2>
+        <form>
+            <input x-model="car.color" placeholder="Color" required>
+            <input x-model="car.make" placeholder="Make" required>
+            <input x-model="car.model" placeholder="Model" required>
+            <input x-model="car.reg_number" placeholder="Registration Number" required>
+            <button type="submit">Add Car</button>
+        </form>
+    </div>
+
+    <!-- GET All Cars -->
+    <div x-data="carsList()" x-init="fetchCars()">
+        <h2>All Cars</h2>
+        <ul>
+            <template x-for="car in cars" :key="car.reg_number">
+                <li>
+                    <strong x-text="car.make"></strong> - 
+                    <span x-text="car.model"></span> - 
+                    <span x-text="car.color"></span>
+                    <button @click="editCar(car.reg_number)">Edit</button>
+                    <button @click="deleteCar(car.reg_number)">Delete</button>
+                </li>
+            </template>
+        </ul>
+    </div>
+
+    <!-- PUT (Update) a Car -->
+    <div x-data="editCarForm()" @submit.prevent="updateCar">
+        <h2>Edit a Car</h2>
+        <form>
+            <input x-model="car.color" placeholder="Color" required>
+            <input x-model="car.make" placeholder="Make" required>
+            <input x-model="car.model" placeholder="Model" required>
+            <input x-model="car.reg_number" placeholder="Registration Number" required>
+            <button type="submit">Update Car</button>
+        </form>
+    </div>
+
+    <!-- GET the Count of Nissans from Malmesbury -->
+    <div x-data="nissanCount()" x-init="fetchNissanCount()">
+        <h2>Nissan Count</h2>
+        <p>Nissans from Malmesbury: <span x-text="count"></span></p>
+    </div>
+
+    <script>
+        // POST a New Car
+        function carForm() {
+            return {
+                car: {
+                    color: '',
+                    make: '',
+                    model: '',
+                    reg_number: ''
+                },
+                async submitCar() {
+                    try {
+                        const response = await axios.post('http://localhost:3000/api/cars', this.car);
+                        console.log('Car added:', response.data);
+                        this.car = { color: '', make: '', model: '', reg_number: '' }; // Reset form
+                    } catch (error) {
+                        console.error('Error adding car:', error);
+                    }
+                }
+            }
+        }
+
+        // GET All Cars
+        function carsList() {
+            return {
+                cars: [],
+                async fetchCars() {
+                    try {
+                        const response = await axios.get('http://localhost:3000/api/cars');
+                        this.cars = response.data;
+                    } catch (error) {
+                        console.error('Error fetching cars:', error);
+                    }
+                },
+                async deleteCar(reg_number) {
+                    try {
+                        await axios.delete(`http://localhost:3000/api/cars/${reg_number}`);
+                        this.fetchCars();  // Refresh the list
+                    } catch (error) {
+                        console.error('Error deleting car:', error);
+                    }
+                }
+            }
+        }
+
+        // PUT (Update) a Car
+        function editCarForm() {
+            return {
+                car: {
+                    color: '',
+                    make: '',
+                    model: '',
+                    reg_number: ''
+                },
+                async updateCar() {
+                    try {
+                        const response = await axios.put(`http://localhost:3000/api/cars/${this.car.reg_number}`, this.car);
+                        console.log('Car updated:', response.data);
+                    } catch (error) {
+                        console.error('Error updating car:', error);
+                    }
+                }
+            }
+        }
+
+        // GET the Count of Nissans from Malmesbury
+        function nissanCount() {
+            return {
+                count: 0,
+                async fetchNissanCount() {
+                    try {
+                        const response = await axios.get('http://localhost:3000/api/cars/nissans-from-ck');
+                        this.count = response.data.count;  // Adjust based on API response structure
+                    } catch (error) {
+                        console.error('Error fetching Nissan count:', error);
+                    }
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
