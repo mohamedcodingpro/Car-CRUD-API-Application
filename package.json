@@ -1,16 +1,49 @@
 {
+  "name": "",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "type": "module",
+  "license": "AGPL-version-3.0",
+  "private": false,
+  "engines": {
+    "node": ">= 14.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": "",
+  "keywords": [],
+  "author": {
+    "name": "",
+    "email": "",
+    "url": ""
+  },
+  "contributors": [],
   "scripts": {
-    "test": "mocha --timeout 10000"
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "test": "mocha"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "chai": "^4.3.4",
+    "alpinejs": "^3.14.1",
+    "axios": "^1.7.4",
+    "body": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "chai-http": "^5.0.0",
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "express": "^4.19.2",
+    "js": "^0.1.0",
+    "nodemon": "^3.1.4",
+    "parser": "^0.1.4",
+    "save": "^2.9.0"
   },
   "devDependencies": {
-    "chai-http": "^5.0.0",
-    "mocha": "^8.4.0"
+    "chai": "^5.1.1",
+    "mocha": "^10.7.3",
+    "supertest": "^7.0.0"
   }
 }

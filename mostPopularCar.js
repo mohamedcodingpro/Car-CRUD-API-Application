@@ -1,5 +1,3 @@
-
-
 export function mostPopularCar(cars) {
     if (!cars || cars.length === 0) return null;
     
